@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimisation Petit-Déjeuner - Riad Marrakech</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Plotly CDN for graphing -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
+</head>
+<body>
+    <header class="header">
+        <h1>Optimisation Petit-Déjeuner - Riad Marrakech</h1>
+        <p class="authors">Auteurs : El Mehdi Aya, Mouissi Charifa, Amiri Yasser, Misky Yahya</p>
+        <p class="supervisors">Encadrants : Abdelati REHA & Mourad Hikki — Année 2025-2026</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab('module1')">MODULE 1 : Méthode Graphique</button>
+        <button class="tab-btn" onclick="openTab('module2')">MODULE 2 : Méthode Simplexe / Dualité</button>
+    </div>
+
+    <main class="content">
+        <!-- MODULE 1 -->
+        <section id="module1" class="tab-content active">
+            <div class="panel-left">
+                <h2>Paramètres (Modifiables)</h2>
+                
+                <div class="form-group">
+                    <label>Coût Continental (y1) :</label>
+                    <input type="number" id="m1_c1" value="35">
+                </div>
+                <div class="form-group">
+                    <label>Coût Healthy (y2) :</label>
+                    <input type="number" id="m1_c2" value="50">
+                </div>
+
+                <h3>Contraintes :</h3>
+                <div class="form-group">
+                    <label>Min menus (y1+y2) :</label>
+                    <input type="number" id="m1_min_menus" value="40">
+                </div>
+                <div class="form-group">
+                    <label>Min temps total :</label>
+                    <input type="number" id="m1_min_time" value="350">
+                </div>
+                <div class="form-group">
+                    <label>Temps par y1 :</label>
+                    <input type="number" id="m1_t1" value="5">
+                </div>
+                <div class="form-group">
+                    <label>Temps par y2 :</label>
+                    <input type="number" id="m1_t2" value="10">
+                </div>
+                <div class="form-group">
+                    <label>Min calories totales :</label>
+                    <input type="number" id="m1_min_cal" value="20000">
+                </div>
+                <div class="form-group">
+                    <label>Calories par y1 :</label>
+                    <input type="number" id="m1_cal1" value="500">
+                </div>
+                <div class="form-group">
+                    <label>Calories par y2 :</label>
+                    <input type="number" id="m1_cal2" value="650">
+                </div>
+
+                <div class="buttons">
+                    <button class="btn-primary" onclick="solveModule1()">Résoudre</button>
+                    <button class="btn-secondary" onclick="resetModule1()">Réinitialiser</button>
+                </div>
+
+                <div class="results" id="res_m1">
+                    <p><strong>y1* (Continental) =</strong> <span id="m1_y1_res">-</span></p>
+                    <p><strong>y2* (Healthy) =</strong> <span id="m1_y2_res">-</span></p>
+                    <p class="optimal-w"><strong>W* =</strong> <span id="m1_w_res">-</span> DH</p>
+                    <p id="m1_error" class="error-msg" style="display:none; color:red; margin-top:10px; font-weight:bold;"></p>
+                </div>
+            </div>
+
+            <div class="panel-right">
+                <div id="plot" style="width:100%;height:100%;min-height:500px;"></div>
+            </div>
+        </section>
+
+        <!-- MODULE 2 -->
+        <section id="module2" class="tab-content">
+            <div class="panel-left">
+                <h2>Paramètres (Modifiables)</h2>
+                
+                <div class="form-group">
+                    <label>Coût Cont. (y1) :</label>
+                    <input type="number" id="m2_c1" value="35">
+                </div>
+                <div class="form-group">
+                    <label>Coût Health. (y2) :</label>
+                    <input type="number" id="m2_c2" value="50">
+                </div>
+                <div class="form-group">
+                    <label>Coût Vegan (y3) :</label>
+                    <input type="number" id="m2_c3" value="45">
+                </div>
+
+                <h3>Contraintes (Minima) :</h3>
+                <div class="form-group">
+                    <label>Min y1 :</label>
+                    <input type="number" id="m2_min_y1" value="20">
+                </div>
+                <div class="form-group">
+                    <label>Min y2 :</label>
+                    <input type="number" id="m2_min_y2" value="10">
+                </div>
+                <div class="form-group">
+                    <label>Min y3 :</label>
+                    <input type="number" id="m2_min_y3" value="10">
+                </div>
+                <div class="form-group">
+                    <label>Min temps total :</label>
+                    <input type="number" id="m2_min_time" value="350">
+                </div>
+                <div class="form-group multi-input">
+                    <label>Temps y1, y2, y3 :</label>
+                    <div>
+                        <input type="number" id="m2_t1" value="5">
+                        <input type="number" id="m2_t2" value="10">
+                        <input type="number" id="m2_t3" value="8">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Min cal totales :</label>
+                    <input type="number" id="m2_min_cal" value="20000">
+                </div>
+                <div class="form-group multi-input">
+                    <label>Cal y1, y2, y3 :</label>
+                    <div>
+                        <input type="number" id="m2_cal1" value="500">
+                        <input type="number" id="m2_cal2" value="650">
+                        <input type="number" id="m2_cal3" value="550">
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button class="btn-primary" onclick="solveModule2()">Résoudre</button>
+                    <button class="btn-secondary" onclick="resetModule2()">Réinitialiser</button>
+                </div>
+
+                <div class="results" id="res_m2">
+                    <p><strong>y* =</strong> (<span id="m2_y1_res">-</span>, <span id="m2_y2_res">-</span>, <span id="m2_y3_res">-</span>)</p>
+                    <p class="optimal-w"><strong>W* =</strong> <span id="m2_w_res">-</span> DH</p>
+                    <div class="dual-sol">
+                        <strong>Solution Duale:</strong><br>
+                        <span id="m2_dual_res">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-right">
+                <h2 style="color: #8B1A1A; margin-bottom: 20px;">Itérations du Simplexe (Problème Dual)</h2>
+                <div id="tableaux-container" class="tableaux-container"></div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
