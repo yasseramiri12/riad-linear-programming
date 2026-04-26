@@ -246,3 +246,37 @@ button {
     color: var(--olive);
     font-size: 0.9rem;
 }
+
+/* Responsive Design pour Téléphones */
+@media (max-width: 768px) {
+    body {
+        height: auto;
+    }
+    .content {
+        flex-direction: column;
+        overflow: visible;
+    }
+    .panel-left {
+        width: 100%;
+        min-width: 100%;
+        border-right: none;
+        border-bottom: 2px solid var(--bordeaux);
+        padding: 15px;
+    }
+    .panel-right {
+        width: 100%;
+        padding: 10px;
+        overflow-x: hidden;
+    }
+    .tabs {
+        flex-wrap: wrap;
+    }
+    .tab-btn {
+        width: 100%;
+        border-radius: 0;
+        border-bottom: 1px solid #ccc;
+    }
+    #plot {
+        min-height: 400px;
+    }
+}

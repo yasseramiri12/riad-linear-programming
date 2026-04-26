@@ -175,7 +175,8 @@ function plotModule1(c1, c2, min_menus, min_time, t1, t2, min_cal, cal1, cal2, o
         margin: {l: 50, r: 20, b: 50, t: 50}
     };
     
-    Plotly.newPlot('plot', traces, layout);
+    let config = {responsive: true};
+    Plotly.newPlot('plot', traces, layout, config);
 }
 
 function resetModule1() {
