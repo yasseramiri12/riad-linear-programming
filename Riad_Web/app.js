@@ -168,17 +168,25 @@ function plotModule1(c1, c2, min_menus, min_time, t1, t2, min_cal, cal1, cal2, o
         marker: {color: 'red', symbol: 'star', size: 15}
     });
     
+    let isMobile = window.innerWidth < 680;
+    
     let layout = {
         title: 'Région Réalisable et Solution Optimale',
         xaxis: {title: 'y1 (Continental)', range: [0, x_max]},
         yaxis: {title: 'y2 (Healthy)', range: [0, y_max]},
-        margin: {l: 40, r: 10, b: 100, t: 40},
+        margin: {
+            l: isMobile ? 35 : 40,
+            r: 10,
+            b: isMobile ? 160 : 50,
+            t: 40
+        },
         legend: {
-            orientation: window.innerWidth < 680 ? 'h' : 'v',
-            yanchor: window.innerWidth < 680 ? 'top' : 'auto',
-            y: window.innerWidth < 680 ? -0.2 : 1,
-            xanchor: window.innerWidth < 680 ? 'center' : 'left',
-            x: window.innerWidth < 680 ? 0.5 : 1.02
+            orientation: isMobile ? 'h' : 'v',
+            yanchor: isMobile ? 'top' : 'auto',
+            y: isMobile ? -0.25 : 1,
+            xanchor: isMobile ? 'center' : 'left',
+            x: isMobile ? 0.5 : 1.02,
+            font: { size: isMobile ? 10 : 12 }
         }
     };
     
