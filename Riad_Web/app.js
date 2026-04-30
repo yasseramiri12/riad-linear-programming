@@ -172,10 +172,17 @@ function plotModule1(c1, c2, min_menus, min_time, t1, t2, min_cal, cal1, cal2, o
         title: 'Région Réalisable et Solution Optimale',
         xaxis: {title: 'y1 (Continental)', range: [0, x_max]},
         yaxis: {title: 'y2 (Healthy)', range: [0, y_max]},
-        margin: {l: 50, r: 20, b: 50, t: 50}
+        margin: {l: 40, r: 10, b: 100, t: 40},
+        legend: {
+            orientation: window.innerWidth < 680 ? 'h' : 'v',
+            yanchor: window.innerWidth < 680 ? 'top' : 'auto',
+            y: window.innerWidth < 680 ? -0.2 : 1,
+            xanchor: window.innerWidth < 680 ? 'center' : 'left',
+            x: window.innerWidth < 680 ? 0.5 : 1.02
+        }
     };
     
-    let config = {responsive: true};
+    let config = {responsive: true, displayModeBar: false};
     Plotly.newPlot('plot', traces, layout, config);
 }
 
