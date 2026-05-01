@@ -129,9 +129,29 @@ function plotModule1(c1, c2, min_menus, min_time, t1, t2, min_cal, cal1, cal2, o
     
     let traces = [];
     
-    traces.push({x: x_vals, y: y2_1, mode: 'lines', name: `y1+y2>=${min_menus}`, line: {color: 'blue'}});
-    traces.push({x: x_vals, y: y2_2, mode: 'lines', name: `${t1}y1+${t2}y2>=${min_time}`, line: {color: 'green'}});
-    traces.push({x: x_vals, y: y2_3, mode: 'lines', name: `${cal1}y1+${cal2}y2>=${min_cal}`, line: {color: 'orange'}});
+    // Design Tokens from CSS
+    const colorTerracotta = '#C1613A';
+    const colorOlive = '#5C6B3A';
+    const colorGold = '#C89B3C';
+    const colorInk = '#2A2118';
+    const colorSand = '#F5EDD8';
+    const colorGlass = 'rgba(92, 107, 58, 0.15)'; // Olive Ghost
+
+    traces.push({
+        x: x_vals, y: y2_1, mode: 'lines', 
+        name: `y1+y2>=${min_menus}`, 
+        line: {color: colorOlive, width: 2}
+    });
+    traces.push({
+        x: x_vals, y: y2_2, mode: 'lines', 
+        name: `${t1}y1+${t2}y2>=${min_time}`, 
+        line: {color: colorGold, width: 2}
+    });
+    traces.push({
+        x: x_vals, y: y2_3, mode: 'lines', 
+        name: `${cal1}y1+${cal2}y2>=${min_cal}`, 
+        line: {color: '#8A7A5E', width: 2} // Sand Dark
+    });
     
     traces.push({
         x: region_x, 
@@ -146,7 +166,7 @@ function plotModule1(c1, c2, min_menus, min_time, t1, t2, min_cal, cal1, cal2, o
         y: region_y_top, 
         mode: 'none', 
         fill: 'tonexty', 
-        fillcolor: 'rgba(128,128,128,0.3)', 
+        fillcolor: colorGlass, 
         name: 'Région réalisable'
     });
     
@@ -156,29 +176,50 @@ function plotModule1(c1, c2, min_menus, min_time, t1, t2, min_cal, cal1, cal2, o
     
     traces.push({
         x: vx, y: vy, mode: 'markers+text', name: 'Sommets', 
-        marker: {color: 'black', size: 8},
-        text: v_text, textposition: 'top right'
+        marker: {color: colorInk, size: 8, line: {color: colorSand, width: 1.5}},
+        text: v_text, textposition: 'top right',
+        textfont: {family: 'Outfit', color: colorInk, size: 11}
     });
     
     let y_obj = x_vals.map(x => c2 !== 0 ? (opt_w - c1*x)/c2 : 0);
-    traces.push({x: x_vals, y: y_obj, mode: 'lines', name: `Objectif W=${opt_w.toFixed(2)}`, line: {color: 'red', dash: 'dash'}});
+    traces.push({
+        x: x_vals, y: y_obj, mode: 'lines', 
+        name: `Objectif W=${opt_w.toFixed(2)}`, 
+        line: {color: colorTerracotta, dash: 'dash', width: 2}
+    });
     
     traces.push({
         x: [opt_x], y: [opt_y], mode: 'markers', name: 'Point optimal',
-        marker: {color: 'red', symbol: 'star', size: 15}
+        marker: {color: colorTerracotta, symbol: 'star', size: 18, line: {color: colorSand, width: 1.5}}
     });
     
     let isMobile = window.innerWidth < 680;
     
     let layout = {
-        title: 'Région Réalisable et Solution Optimale',
-        xaxis: {title: 'y1 (Continental)', range: [0, x_max]},
-        yaxis: {title: 'y2 (Healthy)', range: [0, y_max]},
+        title: {
+            text: 'Région Réalisable et Solution Optimale',
+            font: { family: 'Cormorant Garamond', size: 24, color: colorInk }
+        },
+        font: { family: 'Outfit', color: colorInk },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        xaxis: {
+            title: 'y1 (Continental)', 
+            range: [0, x_max],
+            gridcolor: 'rgba(42, 33, 24, 0.08)',
+            zerolinecolor: 'rgba(42, 33, 24, 0.2)'
+        },
+        yaxis: {
+            title: 'y2 (Healthy)', 
+            range: [0, y_max],
+            gridcolor: 'rgba(42, 33, 24, 0.08)',
+            zerolinecolor: 'rgba(42, 33, 24, 0.2)'
+        },
         margin: {
-            l: isMobile ? 35 : 40,
-            r: 10,
-            b: isMobile ? 160 : 50,
-            t: 40
+            l: isMobile ? 35 : 50,
+            r: 20,
+            b: isMobile ? 160 : 60,
+            t: 60
         },
         legend: {
             orientation: isMobile ? 'h' : 'v',
@@ -186,7 +227,11 @@ function plotModule1(c1, c2, min_menus, min_time, t1, t2, min_cal, cal1, cal2, o
             y: isMobile ? -0.25 : 1,
             xanchor: isMobile ? 'center' : 'left',
             x: isMobile ? 0.5 : 1.02,
-            font: { size: isMobile ? 10 : 12 }
+            font: { size: isMobile ? 11 : 13, family: 'Outfit' },
+            bgcolor: 'rgba(255, 252, 245, 0.5)', // slightly transparent for glassmorphism match
+            bordercolor: 'rgba(200, 155, 60, 0.2)',
+            borderwidth: 1,
+            borderpad: 8
         }
     };
     
