@@ -135,18 +135,26 @@ function plotModule1(c1, c2, min_menus, min_time, t1, t2, min_cal, cal1, cal2, o
     const colorGold = '#C89B3C';
     const colorInk = '#2A2118';
     const colorSand = '#F5EDD8';
-    const colorGlass = 'rgba(92, 107, 58, 0.15)'; // Olive Ghost
+    // Use a custom gradient for the feasible region so it doesn't look like a solid block
+    const gradientFill = {
+        linearGradient: { x1: 0, y1: 1, x2: 0, y2: 0 },
+        stops: [
+            [0, 'rgba(92, 107, 58, 0.3)'],
+            [1, 'rgba(92, 107, 58, 0.05)']
+        ]
+    };
 
     // 1. Feasible Region Using 'arearange'
     let areaData = [];
     for(let i=0; i<region_x.length; i++) {
-        areaData.push([region_x[i], region_y[i], region_y_top[i]]);
+        // Cap the height gracefully instead of sending it off-screen too high
+        areaData.push([region_x[i], region_y[i], y_max]);
     }
     seriesData.push({
         type: 'arearange',
         name: 'Région réalisable',
         data: areaData,
-        color: colorGlass,
+        color: gradientFill,
         lineWidth: 0,
         enableMouseTracking: false,
         marker: { enabled: false }
@@ -181,22 +189,27 @@ function plotModule1(c1, c2, min_menus, min_time, t1, t2, min_cal, cal1, cal2, o
 
     // 4. Vertices
     let vertexData = vertices.map((v, i) => ({
-        x: v.x, y: v.y, name: String.fromCharCode(65+i)
+        x: v.x, y: v.y, name: String.fromCharCode(65+i),
+        fullName: `${String.fromCharCode(65+i)} (${v.x.toFixed(1)}, ${v.y.toFixed(1)})`
     }));
     seriesData.push({
         type: 'scatter', name: 'Sommets', data: vertexData,
-        color: colorInk, marker: {radius: 5, lineColor: colorSand, lineWidth: 1.5},
+        color: colorInk, marker: {radius: 6, lineColor: colorSand, lineWidth: 2},
+        clip: false, // Prevent points at 0 from being cut off
         dataLabels: { 
             enabled: true, 
-            format: '{point.name}({point.x:.2f}, {point.y:.2f})', 
-            style: {fontFamily: 'Outfit', color: colorInk, fontSize: '11px', fontWeight: 'normal', textOutline: '2px ' + colorSand} 
-        }
+            format: '{point.name}', // Just show purely A, B, C for cleaner look
+            y: -15, // Offset above the point
+            style: {fontFamily: 'Outfit', color: colorInk, fontSize: '13px', fontWeight: 'bold', textOutline: '3px ' + colorSand} 
+        },
+        tooltip: { pointFormat: '<b>{point.fullName}</b>' }
     });
     
     // 5. Optimal Point
     seriesData.push({
         type: 'scatter', name: 'Point optimal', data: [{x: opt_x, y: opt_y}],
-        color: colorTerracotta, marker: {symbol: 'triangle', radius: 8, lineColor: colorSand, lineWidth: 1.5},
+        color: colorTerracotta, marker: {symbol: 'triangle', radius: 10, lineColor: colorSand, lineWidth: 2},
+        clip: false,
         zIndex: 10
     });
     
@@ -208,46 +221,49 @@ function plotModule1(c1, c2, min_menus, min_time, t1, t2, min_cal, cal1, cal2, o
 
     window.hcChart = Highcharts.chart('plot', {
         chart: {
+            height: isMobile ? 480 : 550, // Make it taller for a better aspect ratio
             backgroundColor: 'transparent',
             style: { fontFamily: 'Outfit' },
-            spacing: [20, !!isMobile ? 10 : 20, 20, !!isMobile ? 10 : 20]
+            spacing: [10, !!isMobile ? 15 : 20, 10, !!isMobile ? 15 : 20]
         },
         title: {
             text: 'Région Réalisable et Solution Optimale',
-            style: { fontFamily: 'Cormorant Garamond', fontSize: '24px', color: colorInk, fontWeight: '600' }
+            style: { fontFamily: 'Cormorant Garamond', fontSize: isMobile ? '20px' : '24px', color: colorInk, fontWeight: '600' }
         },
         xAxis: {
             title: { text: 'y1 (Continental)', style: {color: colorInk} },
             min: 0, max: x_max,
-            gridLineColor: 'rgba(42, 33, 24, 0.08)',
-            lineColor: 'rgba(42, 33, 24, 0.2)',
-            tickColor: 'rgba(42, 33, 24, 0.2)'
+            gridLineColor: 'rgba(42, 33, 24, 0.05)',
+            lineColor: colorInk,
+            tickColor: colorInk
         },
         yAxis: {
             title: { text: 'y2 (Healthy)', style: {color: colorInk} },
             min: 0, max: y_max,
-            gridLineColor: 'rgba(42, 33, 24, 0.08)',
-            lineColor: 'rgba(42, 33, 24, 0.2)',
-            tickColor: 'rgba(42, 33, 24, 0.2)'
+            gridLineColor: 'rgba(42, 33, 24, 0.05)',
+            lineColor: colorInk,
+            lineWidth: 1, // Draw the Y axis line explicitly
+            tickColor: colorInk
         },
         tooltip: {
             shared: false,
-            backgroundColor: 'rgba(255, 252, 245, 0.9)',
-            borderColor: 'rgba(200, 155, 60, 0.3)',
+            backgroundColor: 'rgba(255, 252, 245, 0.95)',
+            borderColor: 'rgba(200, 155, 60, 0.4)',
             borderRadius: 8,
-            style: {
-                color: colorInk
-            }
+            style: { color: colorInk, fontSize: '13px' },
+            padding: 12
         },
         legend: {
             layout: isMobile ? 'horizontal' : 'vertical',
             align: isMobile ? 'center' : 'right',
             verticalAlign: isMobile ? 'bottom' : 'middle',
-            backgroundColor: 'rgba(255, 252, 245, 0.5)',
+            backgroundColor: 'rgba(255, 252, 245, 0.7)',
             borderColor: 'rgba(200, 155, 60, 0.2)',
             borderWidth: 1,
             borderRadius: 8,
-            itemStyle: { fontFamily: 'Outfit', color: colorInk, fontWeight: 'normal' }
+            padding: 12,
+            itemStyle: { fontFamily: 'Outfit', color: colorInk, fontWeight: 'normal', fontSize: '12px' },
+            itemMarginBottom: 4
         },
         plotOptions: {
             series: { animation: false } 
