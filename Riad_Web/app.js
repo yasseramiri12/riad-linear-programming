@@ -127,7 +127,7 @@ function plotModule1(c1, c2, min_menus, min_time, t1, t2, min_cal, cal1, cal2, o
         }
     }
     
-    let traces = [];
+    let seriesData = [];
     
     // Design Tokens from CSS
     const colorTerracotta = '#C1613A';
@@ -137,106 +137,124 @@ function plotModule1(c1, c2, min_menus, min_time, t1, t2, min_cal, cal1, cal2, o
     const colorSand = '#F5EDD8';
     const colorGlass = 'rgba(92, 107, 58, 0.15)'; // Olive Ghost
 
-    traces.push({
-        x: x_vals, y: y2_1, mode: 'lines', 
-        name: `y1+y2>=${min_menus}`, 
-        line: {color: colorOlive, width: 2}
+    // 1. Feasible Region Using 'arearange'
+    let areaData = [];
+    for(let i=0; i<region_x.length; i++) {
+        areaData.push([region_x[i], region_y[i], region_y_top[i]]);
+    }
+    seriesData.push({
+        type: 'arearange',
+        name: 'Région réalisable',
+        data: areaData,
+        color: colorGlass,
+        lineWidth: 0,
+        enableMouseTracking: false,
+        marker: { enabled: false }
     });
-    traces.push({
-        x: x_vals, y: y2_2, mode: 'lines', 
-        name: `${t1}y1+${t2}y2>=${min_time}`, 
-        line: {color: colorGold, width: 2}
+
+    // 2. Constraint Lines
+    let line1Data = x_vals.map((x, i) => [x, y2_1[i]]);
+    seriesData.push({
+        type: 'line', name: `y1+y2>=${min_menus}`, data: line1Data,
+        color: colorOlive, lineWidth: 2, marker: {enabled: false}
     });
-    traces.push({
-        x: x_vals, y: y2_3, mode: 'lines', 
-        name: `${cal1}y1+${cal2}y2>=${min_cal}`, 
-        line: {color: '#8A7A5E', width: 2} // Sand Dark
+
+    let line2Data = x_vals.map((x, i) => [x, y2_2[i]]);
+    seriesData.push({
+        type: 'line', name: `${t1}y1+${t2}y2>=${min_time}`, data: line2Data,
+        color: colorGold, lineWidth: 2, marker: {enabled: false}
     });
-    
-    traces.push({
-        x: region_x, 
-        y: region_y, 
-        mode: 'lines', 
-        line: {width: 0}, 
-        showlegend: false,
-        hoverinfo: 'none'
+
+    let line3Data = x_vals.map((x, i) => [x, y2_3[i]]);
+    seriesData.push({
+        type: 'line', name: `${cal1}y1+${cal2}y2>=${min_cal}`, data: line3Data,
+        color: '#8A7A5E', lineWidth: 2, marker: {enabled: false}
     });
-    traces.push({
-        x: region_x, 
-        y: region_y_top, 
-        mode: 'none', 
-        fill: 'tonexty', 
-        fillcolor: colorGlass, 
-        name: 'Région réalisable'
-    });
-    
-    let vx = vertices.map(v => v.x);
-    let vy = vertices.map(v => v.y);
-    let v_text = vertices.map((v, i) => String.fromCharCode(65+i) + `(${v.x.toFixed(2)}, ${v.y.toFixed(2)})`);
-    
-    traces.push({
-        x: vx, y: vy, mode: 'markers+text', name: 'Sommets', 
-        marker: {color: colorInk, size: 8, line: {color: colorSand, width: 1.5}},
-        text: v_text, textposition: 'top right',
-        textfont: {family: 'Outfit', color: colorInk, size: 11}
-    });
-    
+
+    // 3. Optimal Objective Line
     let y_obj = x_vals.map(x => c2 !== 0 ? (opt_w - c1*x)/c2 : 0);
-    traces.push({
-        x: x_vals, y: y_obj, mode: 'lines', 
-        name: `Objectif W=${opt_w.toFixed(2)}`, 
-        line: {color: colorTerracotta, dash: 'dash', width: 2}
+    let objData = x_vals.map((x, i) => [x, y_obj[i]]);
+    seriesData.push({
+        type: 'line', name: `Objectif W=${opt_w.toFixed(2)}`, data: objData,
+        color: colorTerracotta, dashStyle: 'Dash', lineWidth: 2, marker: {enabled: false}
+    });
+
+    // 4. Vertices
+    let vertexData = vertices.map((v, i) => ({
+        x: v.x, y: v.y, name: String.fromCharCode(65+i)
+    }));
+    seriesData.push({
+        type: 'scatter', name: 'Sommets', data: vertexData,
+        color: colorInk, marker: {radius: 5, lineColor: colorSand, lineWidth: 1.5},
+        dataLabels: { 
+            enabled: true, 
+            format: '{point.name}({point.x:.2f}, {point.y:.2f})', 
+            style: {fontFamily: 'Outfit', color: colorInk, fontSize: '11px', fontWeight: 'normal', textOutline: '2px ' + colorSand} 
+        }
     });
     
-    traces.push({
-        x: [opt_x], y: [opt_y], mode: 'markers', name: 'Point optimal',
-        marker: {color: colorTerracotta, symbol: 'star', size: 18, line: {color: colorSand, width: 1.5}}
+    // 5. Optimal Point
+    seriesData.push({
+        type: 'scatter', name: 'Point optimal', data: [{x: opt_x, y: opt_y}],
+        color: colorTerracotta, marker: {symbol: 'triangle', radius: 8, lineColor: colorSand, lineWidth: 1.5},
+        zIndex: 10
     });
     
     let isMobile = window.innerWidth < 680;
     
-    let layout = {
+    if (window.hcChart) {
+        window.hcChart.destroy();
+    }
+
+    window.hcChart = Highcharts.chart('plot', {
+        chart: {
+            backgroundColor: 'transparent',
+            style: { fontFamily: 'Outfit' },
+            spacing: [20, !!isMobile ? 10 : 20, 20, !!isMobile ? 10 : 20]
+        },
         title: {
             text: 'Région Réalisable et Solution Optimale',
-            font: { family: 'Cormorant Garamond', size: 24, color: colorInk }
+            style: { fontFamily: 'Cormorant Garamond', fontSize: '24px', color: colorInk, fontWeight: '600' }
         },
-        font: { family: 'Outfit', color: colorInk },
-        paper_bgcolor: 'rgba(0,0,0,0)',
-        plot_bgcolor: 'rgba(0,0,0,0)',
-        xaxis: {
-            title: 'y1 (Continental)', 
-            range: [0, x_max],
-            gridcolor: 'rgba(42, 33, 24, 0.08)',
-            zerolinecolor: 'rgba(42, 33, 24, 0.2)'
+        xAxis: {
+            title: { text: 'y1 (Continental)', style: {color: colorInk} },
+            min: 0, max: x_max,
+            gridLineColor: 'rgba(42, 33, 24, 0.08)',
+            lineColor: 'rgba(42, 33, 24, 0.2)',
+            tickColor: 'rgba(42, 33, 24, 0.2)'
         },
-        yaxis: {
-            title: 'y2 (Healthy)', 
-            range: [0, y_max],
-            gridcolor: 'rgba(42, 33, 24, 0.08)',
-            zerolinecolor: 'rgba(42, 33, 24, 0.2)'
+        yAxis: {
+            title: { text: 'y2 (Healthy)', style: {color: colorInk} },
+            min: 0, max: y_max,
+            gridLineColor: 'rgba(42, 33, 24, 0.08)',
+            lineColor: 'rgba(42, 33, 24, 0.2)',
+            tickColor: 'rgba(42, 33, 24, 0.2)'
         },
-        margin: {
-            l: isMobile ? 35 : 50,
-            r: 20,
-            b: isMobile ? 160 : 60,
-            t: 60
+        tooltip: {
+            shared: false,
+            backgroundColor: 'rgba(255, 252, 245, 0.9)',
+            borderColor: 'rgba(200, 155, 60, 0.3)',
+            borderRadius: 8,
+            style: {
+                color: colorInk
+            }
         },
         legend: {
-            orientation: isMobile ? 'h' : 'v',
-            yanchor: isMobile ? 'top' : 'auto',
-            y: isMobile ? -0.25 : 1,
-            xanchor: isMobile ? 'center' : 'left',
-            x: isMobile ? 0.5 : 1.02,
-            font: { size: isMobile ? 11 : 13, family: 'Outfit' },
-            bgcolor: 'rgba(255, 252, 245, 0.5)', // slightly transparent for glassmorphism match
-            bordercolor: 'rgba(200, 155, 60, 0.2)',
-            borderwidth: 1,
-            borderpad: 8
-        }
-    };
-    
-    let config = {responsive: true, displayModeBar: false};
-    Plotly.newPlot('plot', traces, layout, config);
+            layout: isMobile ? 'horizontal' : 'vertical',
+            align: isMobile ? 'center' : 'right',
+            verticalAlign: isMobile ? 'bottom' : 'middle',
+            backgroundColor: 'rgba(255, 252, 245, 0.5)',
+            borderColor: 'rgba(200, 155, 60, 0.2)',
+            borderWidth: 1,
+            borderRadius: 8,
+            itemStyle: { fontFamily: 'Outfit', color: colorInk, fontWeight: 'normal' }
+        },
+        plotOptions: {
+            series: { animation: false } 
+        },
+        series: seriesData,
+        credits: { enabled: false }
+    });
 }
 
 function resetModule1() {
@@ -255,7 +273,10 @@ function resetModule1() {
     setValue('m1_w_res', '-');
     document.getElementById('m1_error').style.display = 'none';
     
-    Plotly.purge('plot');
+    if (window.hcChart) {
+        window.hcChart.destroy();
+        window.hcChart = null;
+    }
 }
 
 // Module 2 Logic (Simplex)
