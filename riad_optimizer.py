@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from scipy.optimize import linprog
-import itertools
 
 # ==========================================
 # OPTIMIZATION LOGIC (SEPARATED FROM GUI)
@@ -315,8 +314,16 @@ class RiadApp(tk.Tk):
         self.configure(bg="#FDF5E6")
         
         header = tk.Frame(self, bg="#FDF5E6")
-        header.pack(fill="x", pady=10)
-        tk.Label(header, text="Optimisation Petit-Déjeuner", font=('Arial', 20, 'bold'), bg="#FDF5E6", fg="#8B1A1A").pack()
+        header.pack(fill="x", pady=15)
+        
+        tk.Label(header, text="Optimisation Petit-Déjeuner", font=('Georgia', 26, 'bold'), bg="#FDF5E6", fg="#8B1A1A").pack()
+        tk.Label(header, text="Riad Marrakech", font=('Georgia', 16, 'italic'), bg="#FDF5E6", fg="#C89B3C").pack(pady=(2, 10))
+        
+        # Diamond divider
+        tk.Label(header, text="— ◊ —", font=('Georgia', 14), bg="#FDF5E6", fg="#C89B3C").pack(pady=(0, 10))
+        
+        tk.Label(header, text="El Mehdi Aya • Mouissi Charifa • Amiri Yasser • Misky Yahya", font=('Helvetica', 12, 'bold'), bg="#FDF5E6", fg="#2A2118").pack()
+        tk.Label(header, text="Encadrants : Abdelati Reha & Mourad Hikki — 2025–2026", font=('Helvetica', 11, 'italic'), bg="#FDF5E6", fg="#5C6B3A").pack(pady=(2, 0))
         
         style = ttk.Style()
         style.theme_use('clam')

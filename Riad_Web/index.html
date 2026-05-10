@@ -8,310 +8,222 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 </head>
 <body>
-
-    <!-- Decorative background -->
     <div class="bg-pattern" aria-hidden="true"></div>
     <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
     <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
 
     <header class="header">
         <div class="header-inner">
-            <div class="header-ornament" aria-hidden="true">
-                <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="header-ornament" aria-hidden="true" style="margin-bottom: 15px;">
+                <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="height: 30px;">
                     <line x1="0" y1="20" x2="40" y2="20" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
                     <polygon points="60,4 68,20 60,36 52,20" stroke="currentColor" stroke-width="1" fill="none" opacity="0.7"/>
                     <circle cx="60" cy="20" r="4" fill="currentColor" opacity="0.6"/>
                     <line x1="80" y1="20" x2="120" y2="20" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
                 </svg>
             </div>
+            
             <h1>Optimisation Petit-Déjeuner</h1>
             <p class="header-subtitle">Riad Marrakech</p>
-            <div class="header-ornament" aria-hidden="true">
-                <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <line x1="0" y1="20" x2="40" y2="20" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
-                    <polygon points="60,4 68,20 60,36 52,20" stroke="currentColor" stroke-width="1" fill="none" opacity="0.7"/>
-                    <circle cx="60" cy="20" r="4" fill="currentColor" opacity="0.6"/>
-                    <line x1="80" y1="20" x2="120" y2="20" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
+            
+            <div class="header-divider" aria-hidden="true">
+                <svg width="160" height="30" viewBox="0 0 160 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="0" y1="15" x2="65" y2="15" stroke="var(--gold)" stroke-width="1" opacity="0.4"/>
+                    <polygon points="80,2 88,15 80,28 72,15" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.8"/>
+                    <circle cx="80" cy="15" r="3" fill="var(--gold)" opacity="0.8"/>
+                    <line x1="95" y1="15" x2="160" y2="15" stroke="var(--gold)" stroke-width="1" opacity="0.4"/>
                 </svg>
             </div>
-            <p class="authors">El Mehdi Aya &bull; Mouissi Charifa &bull; Amiri Yasser &bull; Misky Yahya</p>
-            <p class="supervisors">Encadrants : Abdelati Reha &amp; Mourad Hikki — 2025–2026</p>
+            
+            <div class="header-authors">
+                <p class="authors-names">El Mehdi Aya &bull; Mouissi Charifa &bull; Amiri Yasser &bull; Misky Yahya</p>
+                <p class="authors-supervisors">Encadrants : Abdelati Reha &amp; Mourad Hikki &mdash; 2025&ndash;2026</p>
+            </div>
         </div>
     </header>
 
-    <nav class="tabs" role="tablist">
-        <button class="tab-btn active" role="tab" aria-selected="true" onclick="openTab('module1')">
-            <span class="tab-num">01</span>
-            <span class="tab-label">Méthode Graphique</span>
-        </button>
-        <button class="tab-btn" role="tab" aria-selected="false" onclick="openTab('module2')">
-            <span class="tab-num">02</span>
-            <span class="tab-label">Simplexe &amp; Dualité</span>
-        </button>
-    </nav>
-
     <main class="content">
-
-        <!-- MODULE 1 -->
-        <section id="module1" class="tab-content active" role="tabpanel">
-            <div class="panel-left">
-
-                <div class="section-badge">Module 01</div>
-                <h2>Paramètres</h2>
-
-                <div class="card-glass">
-                    <h3 class="card-title">
-                        <span class="card-title-icon">💰</span> Coûts des menus
-                    </h3>
-                    <div class="form-group">
-                        <label for="m1_c1">Continental (y₁)</label>
-                        <div class="input-wrap">
-                            <input type="number" id="m1_c1" value="35">
-                            <span class="input-unit">DH</span>
+        <!-- ÉTAPE 1 : Configuration -->
+        <section id="step1-setup" class="view-active">
+            <div class="card-glass" style="max-width: 600px; margin: 40px auto; text-align: center; padding: 40px;">
+                <h2 style="font-family: var(--font-display); font-size: 2.5rem; color: var(--terracotta-deep); margin-bottom: 20px;">Configuration du Modèle</h2>
+                <p style="margin-bottom: 30px; font-size: 1.1rem; color: var(--ink-soft);">Combien de types de menus proposez-vous aujourd'hui ?</p>
+                <div class="form-group" style="margin-bottom: 40px;">
+                    <div class="input-wrap" style="width: 280px; margin: 0 auto;">
+                        <div class="custom-select-wrapper">
+                            <div class="custom-select">
+                                <div class="custom-select__trigger"><span>2 Menus (Continental, Healthy)</span>
+                                    <div class="arrow"></div>
+                                </div>
+                                <div class="custom-options">
+                                    <span class="custom-option selected" data-value="2">2 Menus (Continental, Healthy)</span>
+                                    <span class="custom-option" data-value="3">3 Menus (+ Vegan)</span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="m1_c2">Healthy (y₂)</label>
-                        <div class="input-wrap">
-                            <input type="number" id="m1_c2" value="50">
-                            <span class="input-unit">DH</span>
-                        </div>
+                        <input type="hidden" id="numVariables" value="2">
                     </div>
                 </div>
-
-                <div class="card-glass">
-                    <h3 class="card-title">
-                        <span class="card-title-icon">⚖️</span> Contraintes
-                    </h3>
-                    <div class="form-group">
-                        <label for="m1_min_menus">Min menus (y₁+y₂)</label>
-                        <div class="input-wrap">
-                            <input type="number" id="m1_min_menus" value="40">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="m1_min_time">Min temps total</label>
-                        <div class="input-wrap">
-                            <input type="number" id="m1_min_time" value="350">
-                            <span class="input-unit">min</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="m1_t1">Temps par y₁</label>
-                        <div class="input-wrap">
-                            <input type="number" id="m1_t1" value="5">
-                            <span class="input-unit">min</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="m1_t2">Temps par y₂</label>
-                        <div class="input-wrap">
-                            <input type="number" id="m1_t2" value="10">
-                            <span class="input-unit">min</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="m1_min_cal">Min calories totales</label>
-                        <div class="input-wrap">
-                            <input type="number" id="m1_min_cal" value="20000">
-                            <span class="input-unit">kcal</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="m1_cal1">Calories par y₁</label>
-                        <div class="input-wrap">
-                            <input type="number" id="m1_cal1" value="500">
-                            <span class="input-unit">kcal</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="m1_cal2">Calories par y₂</label>
-                        <div class="input-wrap">
-                            <input type="number" id="m1_cal2" value="650">
-                            <span class="input-unit">kcal</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="buttons">
-                    <button class="btn-primary" onclick="solveModule1()">
-                        <span>Résoudre</span>
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <div class="buttons" style="justify-content: center;">
+                    <button class="btn-primary" onclick="goToStep2()" style="padding: 15px 40px; font-size: 1.2rem; max-width: 250px; margin: 0 auto;">
+                        <span>Suivant</span>
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
-                    <button class="btn-secondary" onclick="resetModule1()">Réinitialiser</button>
                 </div>
-
-                <div class="results" id="res_m1">
-                    <div class="result-grid">
-                        <div class="result-item">
-                            <span class="result-label">y₁* Continental</span>
-                            <span class="result-value" id="m1_y1_res">—</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">y₂* Healthy</span>
-                            <span class="result-value" id="m1_y2_res">—</span>
-                        </div>
-                    </div>
-                    <div class="result-optimal">
-                        <span class="result-optimal-label">Coût Optimal W*</span>
-                        <span class="result-optimal-value"><span id="m1_w_res">—</span> <small>DH</small></span>
-                    </div>
-                    <p id="m1_error" class="error-msg" style="display:none;"></p>
-                </div>
-            </div>
-
-            <div class="panel-right">
-                <div class="plot-header">
-                    <h3>Région Admissible &amp; Optimum</h3>
-                    <p class="plot-hint">La solution optimale est marquée en rouge</p>
-                </div>
-                <div id="plot" style="width:100%;height:100%;min-height:500px;"></div>
             </div>
         </section>
 
-        <!-- MODULE 2 -->
-        <section id="module2" class="tab-content" role="tabpanel">
-            <div class="panel-left">
-
-                <div class="section-badge">Module 02</div>
-                <h2>Paramètres</h2>
-
-                <div class="card-glass">
-                    <h3 class="card-title">
-                        <span class="card-title-icon">💰</span> Coûts des menus
-                    </h3>
-                    <div class="form-group">
-                        <label for="m2_c1">Continental (y₁)</label>
-                        <div class="input-wrap">
-                            <input type="number" id="m2_c1" value="35">
-                            <span class="input-unit">DH</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="m2_c2">Healthy (y₂)</label>
-                        <div class="input-wrap">
-                            <input type="number" id="m2_c2" value="50">
-                            <span class="input-unit">DH</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="m2_c3">Vegan (y₃)</label>
-                        <div class="input-wrap">
-                            <input type="number" id="m2_c3" value="45">
-                            <span class="input-unit">DH</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-glass">
-                    <h3 class="card-title">
-                        <span class="card-title-icon">⚖️</span> Contraintes — Minima
-                    </h3>
-                    <div class="form-group">
-                        <label for="m2_min_y1">Min y₁</label>
-                        <div class="input-wrap"><input type="number" id="m2_min_y1" value="20"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="m2_min_y2">Min y₂</label>
-                        <div class="input-wrap"><input type="number" id="m2_min_y2" value="10"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="m2_min_y3">Min y₃</label>
-                        <div class="input-wrap"><input type="number" id="m2_min_y3" value="10"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="m2_min_time">Min temps total</label>
-                        <div class="input-wrap">
-                            <input type="number" id="m2_min_time" value="350">
-                            <span class="input-unit">min</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-glass">
-                    <h3 class="card-title">
-                        <span class="card-title-icon">⏱️</span> Temps par menu
-                    </h3>
-                    <div class="form-group multi-input">
-                        <label>y₁ / y₂ / y₃</label>
-                        <div class="multi-inputs">
-                            <div class="input-wrap"><input type="number" id="m2_t1" value="5"></div>
-                            <div class="input-wrap"><input type="number" id="m2_t2" value="10"></div>
-                            <div class="input-wrap"><input type="number" id="m2_t3" value="8"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-glass">
-                    <h3 class="card-title">
-                        <span class="card-title-icon">🔥</span> Calories
-                    </h3>
-                    <div class="form-group">
-                        <label for="m2_min_cal">Min calories totales</label>
-                        <div class="input-wrap">
-                            <input type="number" id="m2_min_cal" value="20000">
-                            <span class="input-unit">kcal</span>
-                        </div>
-                    </div>
-                    <div class="form-group multi-input">
-                        <label>Cal y₁ / y₂ / y₃</label>
-                        <div class="multi-inputs">
-                            <div class="input-wrap"><input type="number" id="m2_cal1" value="500"></div>
-                            <div class="input-wrap"><input type="number" id="m2_cal2" value="650"></div>
-                            <div class="input-wrap"><input type="number" id="m2_cal3" value="550"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="buttons">
-                    <button class="btn-primary" onclick="solveModule2()">
-                        <span>Résoudre</span>
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <!-- ÉTAPE 2 : Saisie des paramètres -->
+        <section id="step2-inputs" class="view-hidden" style="display: none;">
+            <div style="max-width: 1000px; margin: 20px auto; padding: 0 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <button class="btn-secondary" onclick="goToStep1()" style="padding: 8px 16px; min-height: 40px;">
+                        <span style="margin-right: 5px;">&larr;</span> Retour
                     </button>
-                    <button class="btn-secondary" onclick="resetModule2()">Réinitialiser</button>
+                    <h2 style="font-family: var(--font-display); color: var(--ink); margin: 0; font-size: 1.8rem;">Contraintes & Paramètres</h2>
                 </div>
-
-                <div class="results" id="res_m2">
-                    <div class="result-grid three-col">
-                        <div class="result-item">
-                            <span class="result-label">y₁*</span>
-                            <span class="result-value" id="m2_y1_res">—</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">y₂*</span>
-                            <span class="result-value" id="m2_y2_res">—</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">y₃*</span>
-                            <span class="result-value" id="m2_y3_res">—</span>
-                        </div>
-                    </div>
-                    <div class="result-optimal">
-                        <span class="result-optimal-label">Coût Optimal W*</span>
-                        <span class="result-optimal-value"><span id="m2_w_res">—</span> <small>DH</small></span>
-                    </div>
-                    <div class="dual-sol">
-                        <span class="dual-label">Solution Duale :</span>
-                        <span id="m2_dual_res">—</span>
-                    </div>
+                
+                <div id="dynamic-form-container"></div>
+                
+                <div class="buttons" style="justify-content: center; margin-top: 30px;">
+                    <button class="btn-primary" onclick="runOptimization()" style="width: 100%; max-width: 400px; padding: 15px; font-size: 1.2rem;">
+                        <span>Calculer l'Optimum</span>
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
                 </div>
-            </div>
-
-            <div class="panel-right">
-                <div class="plot-header">
-                    <h3>Itérations du Simplexe</h3>
-                    <p class="plot-hint">Problème dual — tableaux successifs</p>
-                </div>
-                <div id="tableaux-container" class="tableaux-container"></div>
             </div>
         </section>
 
+        <!-- ÉTAPE 3 : Résultats -->
+        <section id="step3-results" class="view-hidden" style="display: none; width: 100%; max-width: 1200px; margin: 20px auto; padding: 0 20px;">
+            <div style="margin-bottom: 20px; text-align: left;">
+                <button class="btn-secondary" onclick="goToStep2()" style="padding: 8px 16px; min-height: 40px;">
+                    <span style="margin-right: 5px;">&larr;</span> Modifier les paramètres
+                </button>
+            </div>
+
+            <!-- RESULTATS : MODULE 1 (Graphique) -->
+            <div id="result-graph-container" style="display: none; width: 100%;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h2 style="font-family: var(--font-display); font-size: 2.2rem; color: var(--terracotta-deep); margin-bottom: 5px;">Méthode Graphique</h2>
+                    <p style="color: var(--ink-soft); font-style: italic;">Résolution pour 2 Variables</p>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 30px;">
+                    <!-- Top section: Numbers -->
+                    <div class="card-glass" style="max-width: 800px; margin: 0 auto; width: 100%;">
+                        <div class="results" id="res_m1" style="background: none; border: none; box-shadow: none; padding: 0;">
+                            <h3 style="color: var(--terracotta-deep); margin-bottom: 15px; text-align: center; font-size: 1.5rem;">Menus Choisis (Optimum)</h3>
+                            <div class="result-grid" style="margin-bottom: 20px;">
+                                <div class="result-item" style="padding: 15px;">
+                                    <span class="result-label">y₁* Continental</span>
+                                    <span class="result-value" id="m1_y1_res">—</span>
+                                </div>
+                                <div class="result-item" style="padding: 15px;">
+                                    <span class="result-label">y₂* Healthy</span>
+                                    <span class="result-value" id="m1_y2_res">—</span>
+                                </div>
+                            </div>
+                            <div class="result-optimal" style="max-width: 400px; margin: 0 auto;">
+                                <span class="result-optimal-label">Coût Optimal W*</span>
+                                <span class="result-optimal-value"><span id="m1_w_res">—</span> <small>DH</small></span>
+                            </div>
+                            <p id="m1_error" class="error-msg" style="display:none; margin-top: 15px;"></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Bottom section: Full screen graph -->
+                    <div class="card-glass" style="width: 100%; padding: 20px;">
+                        <div class="plot-header" style="text-align: center; margin-bottom: 20px;">
+                            <h3 style="font-size: 1.5rem;">Région Admissible & Optimum</h3>
+                        </div>
+                        <div id="plot" style="width:100%; height:500px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESULTATS : MODULE 2 (3 Variables) -->
+            <div id="result-simplex-container" style="display: none; width: 100%;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h2 style="font-family: var(--font-display); font-size: 2.2rem; color: var(--terracotta-deep); margin-bottom: 5px;">Simplexe & Dualité</h2>
+                    <p style="color: var(--ink-soft); font-style: italic;">Résolution pour 3 Variables</p>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 30px;">
+                    <!-- Top Section: Optimal Results -->
+                    <div class="card-glass" style="max-width: 800px; margin: 0 auto; width: 100%; padding: 30px;">
+                        <h3 style="color: var(--terracotta-deep); text-align: center; margin-bottom: 25px; font-size: 1.5rem; font-family: var(--font-display);">Menus Choisis (Optimum)</h3>
+                        <div class="result-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 25px;">
+                            <div class="result-item" style="padding: 20px 10px;">
+                                <span class="result-label">y₁* Continental</span>
+                                <span class="result-value" id="m2_y1_res">—</span>
+                            </div>
+                            <div class="result-item" style="padding: 20px 10px;">
+                                <span class="result-label">y₂* Healthy</span>
+                                <span class="result-value" id="m2_y2_res">—</span>
+                            </div>
+                            <div class="result-item" style="padding: 20px 10px;">
+                                <span class="result-label">y₃* Vegan</span>
+                                <span class="result-value" id="m2_y3_res">—</span>
+                            </div>
+                        </div>
+                        <div class="result-optimal" style="padding: 20px; max-width: 500px; margin: 0 auto;">
+                            <span class="result-optimal-label">Coût Optimal W*</span>
+                            <span class="result-optimal-value" style="font-size: 2.2rem;"><span id="m2_w_res">—</span> <small>DH</small></span>
+                        </div>
+                        
+                        <div class="dual-sol" style="margin-top: 25px; text-align: center;" id="m2_dual_container">
+                            <span class="dual-label" style="margin-bottom: 10px; font-size: 1rem;">Solution Duale (Variables d'écart & marginales) :</span>
+                            <span id="m2_dual_res" style="font-size: 1.1rem;">—</span>
+                        </div>
+                        <p id="m2_error" class="error-msg" style="display:none; margin-top: 15px;"></p>
+                    </div>
+
+                    <!-- Bottom Section: Full Width Simplex Tableaux -->
+                    <div class="card-glass" style="width: 100%; padding: 30px; background: rgba(255, 252, 245, 0.9);">
+                        <div class="plot-header" style="text-align: center; margin-bottom: 30px;">
+                            <h3 style="font-size: 1.8rem; font-family: var(--font-display); color: var(--terracotta-deep);">Itérations du Simplexe</h3>
+                            <p class="plot-hint" style="font-size: 1rem;">Problème dual — tableaux successifs</p>
+                        </div>
+                        <div id="tableaux-container" class="tableaux-container" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="buttons" style="margin-top: 40px; justify-content: center;">
+                <button class="btn-secondary" onclick="goToStep1()" style="max-width: 300px; font-size: 1.2rem; padding: 15px;">Nouvelle Optimisation</button>
+            </div>
+        </section>
     </main>
 
+    <div id="hidden-inputs" style="display: none;"></div>
+
     <script src="app.js"></script>
+    <script>
+        document.querySelector('.custom-select-wrapper').addEventListener('click', function() {
+            this.querySelector('.custom-select').classList.toggle('open');
+        });
+
+        for (const option of document.querySelectorAll(".custom-option")) {
+            option.addEventListener('click', function() {
+                if (!this.classList.contains('selected')) {
+                    this.parentNode.querySelector('.custom-option.selected').classList.remove('selected');
+                    this.classList.add('selected');
+                    this.closest('.custom-select').querySelector('.custom-select__trigger span').textContent = this.textContent;
+                    document.getElementById('numVariables').value = this.getAttribute('data-value');
+                }
+            });
+        }
+
+        window.addEventListener('click', function(e) {
+            const select = document.querySelector('.custom-select');
+            if (!select.contains(e.target)) {
+                select.classList.remove('open');
+            }
+        });
+    </script>
 </body>
 </html>
