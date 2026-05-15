@@ -76,25 +76,21 @@ function runOptimization() {
     
     document.getElementById('step2-inputs').style.display = 'none';
     document.getElementById('step3-results').style.display = 'block';
-    
-    setTimeout(() => {
-        window.dispatchEvent(new Event('resize')); 
-    }, 100);
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
     
     if (numVars === 2) {
         document.getElementById('result-graph-container').style.display = 'block';
         document.getElementById('result-simplex-container').style.display = 'none';
-        
         mapInputsToIDs(2);
         solveModule1();
     } else {
         document.getElementById('result-graph-container').style.display = 'none';
         document.getElementById('result-simplex-container').style.display = 'block';
-        
         mapInputsToIDs(3);
         solveModule2();
     }
 }
+
 
 function mapInputsToIDs(numVars) {
     const hiddenContainer = document.getElementById('hidden-inputs');
