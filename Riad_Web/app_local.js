@@ -42,23 +42,37 @@ function generateDynamicForm(numVars) {
             ${numVars === 3 ? `
             <div class="form-group">
                 <label for="dyn_c3">Vegan (y₃)</label>
-                <div class="input-wrap"><input type="number" id="dyn_c3" value="65"><span class="input-unit">DH</span></div>
+                <div class="input-wrap"><input type="number" id="dyn_c3" value="45"><span class="input-unit">DH</span></div>
             </div>` : ''}
         </div>
 
         <div class="card-glass" style="flex: 1; min-width: 300px;">
             <h3 class="card-title"><span class="card-title-icon">⚖️</span> Contraintes Générales</h3>
+            ${numVars === 2 ? `
             <div class="form-group">
                 <label for="dyn_min_menus">Min menus totaux</label>
-                <div class="input-wrap"><input type="number" id="dyn_min_menus" value="${numVars === 2 ? '40' : '60'}"></div>
+                <div class="input-wrap"><input type="number" id="dyn_min_menus" value="40"></div>
+            </div>` : `
+            <div class="form-group">
+                <label for="dyn_min_y1">Min Continental (y₁)</label>
+                <div class="input-wrap"><input type="number" id="dyn_min_y1" value="20"></div>
             </div>
             <div class="form-group" style="margin-top:10px;">
+                <label for="dyn_min_y2">Min Healthy (y₂)</label>
+                <div class="input-wrap"><input type="number" id="dyn_min_y2" value="10"></div>
+            </div>
+            <div class="form-group" style="margin-top:10px;">
+                <label for="dyn_min_y3">Min Vegan (y₃)</label>
+                <div class="input-wrap"><input type="number" id="dyn_min_y3" value="10"></div>
+            </div>
+            `}
+            <div class="form-group" style="margin-top:10px;">
                 <label for="dyn_min_time">Min temps total</label>
-                <div class="input-wrap"><input type="number" id="dyn_min_time" value="${numVars === 2 ? '350' : '600'}"><span class="input-unit">min</span></div>
+                <div class="input-wrap"><input type="number" id="dyn_min_time" value="350"><span class="input-unit">min</span></div>
             </div>
             <div class="form-group" style="margin-top:10px;">
                 <label for="dyn_min_cal">Min calories</label>
-                <div class="input-wrap"><input type="number" id="dyn_min_cal" value="${numVars === 2 ? '20000' : '35000'}"><span class="input-unit">kcal</span></div>
+                <div class="input-wrap"><input type="number" id="dyn_min_cal" value="20000"><span class="input-unit">kcal</span></div>
             </div>
         </div>
 
@@ -66,11 +80,11 @@ function generateDynamicForm(numVars) {
             <h3 class="card-title"><span class="card-title-icon">⏱️</span> Détails Techniques</h3>
             <div class="form-group"><label for="dyn_t1">Temps par y₁</label><div class="input-wrap"><input type="number" id="dyn_t1" value="5"><span class="input-unit">m</span></div></div>
             <div class="form-group"><label for="dyn_t2">Temps par y₂</label><div class="input-wrap"><input type="number" id="dyn_t2" value="10"><span class="input-unit">m</span></div></div>
-            ${numVars === 3 ? `<div class="form-group"><label for="dyn_t3">Temps par y₃</label><div class="input-wrap"><input type="number" id="dyn_t3" value="15"><span class="input-unit">m</span></div></div>` : ''}
+            ${numVars === 3 ? `<div class="form-group"><label for="dyn_t3">Temps par y₃</label><div class="input-wrap"><input type="number" id="dyn_t3" value="8"><span class="input-unit">m</span></div></div>` : ''}
             <div style="height: 1px; background: var(--glass-border); margin: 15px 0;"></div>
             <div class="form-group"><label for="dyn_cal1">Cal par y₁</label><div class="input-wrap"><input type="number" id="dyn_cal1" value="500"><span class="input-unit">k</span></div></div>
             <div class="form-group"><label for="dyn_cal2">Cal par y₂</label><div class="input-wrap"><input type="number" id="dyn_cal2" value="650"><span class="input-unit">k</span></div></div>
-            ${numVars === 3 ? `<div class="form-group"><label for="dyn_cal3">Cal par y₃</label><div class="input-wrap"><input type="number" id="dyn_cal3" value="900"><span class="input-unit">k</span></div></div>` : ''}
+            ${numVars === 3 ? `<div class="form-group"><label for="dyn_cal3">Cal par y₃</label><div class="input-wrap"><input type="number" id="dyn_cal3" value="550"><span class="input-unit">k</span></div></div>` : ''}
         </div>
     </div>`;
     container.innerHTML = html;
@@ -82,12 +96,8 @@ function getFormParams(numVars) {
     const p = {};
     const ids = numVars === 2
         ? ['dyn_c1','dyn_c2','dyn_min_menus','dyn_min_time','dyn_t1','dyn_t2','dyn_min_cal','dyn_cal1','dyn_cal2']
-        : ['dyn_c1','dyn_c2','dyn_c3','dyn_min_menus','dyn_min_time','dyn_t1','dyn_t2','dyn_t3','dyn_min_cal','dyn_cal1','dyn_cal2','dyn_cal3'];
+        : ['dyn_c1','dyn_c2','dyn_c3','dyn_min_y1','dyn_min_y2','dyn_min_y3','dyn_min_time','dyn_t1','dyn_t2','dyn_t3','dyn_min_cal','dyn_cal1','dyn_cal2','dyn_cal3'];
     ids.forEach(id => p[id.replace('dyn_', '')] = parseFloat(document.getElementById(id).value) || 0);
-    if (numVars === 3) {
-        const third = p['min_menus'] / 3;
-        p['min_y1'] = third; p['min_y2'] = third; p['min_y3'] = third;
-    }
     return p;
 }
 
